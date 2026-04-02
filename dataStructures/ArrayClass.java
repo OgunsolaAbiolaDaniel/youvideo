@@ -1,4 +1,4 @@
-package YouVideo;
+package dataStructures;
 
 /**
  * This class provides an implementation of the Array interface with a dynamically resizing array.

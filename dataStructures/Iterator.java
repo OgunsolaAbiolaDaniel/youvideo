@@ -1,4 +1,4 @@
-package YouVideo;
+package dataStructures;
 
 /**
  * This interface represents an iterator over a collection of elements of type E.
