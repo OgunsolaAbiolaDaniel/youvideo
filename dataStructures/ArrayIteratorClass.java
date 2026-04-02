@@ -1,4 +1,4 @@
-package YouVideo;
+package dataStructures;
 
 /**
  * This class implements an iterator an over an array

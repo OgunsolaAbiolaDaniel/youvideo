@@ -1,4 +1,4 @@
-package YouVideo;
+package dataStructures;
 
 /**
  * This interface represents an array data structure that stores elements of type E.
