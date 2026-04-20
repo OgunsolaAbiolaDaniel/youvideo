@@ -1,7 +1,8 @@
-import YouVideo.*;
 import java.util.Scanner;
-
+import youvideo.core.*;
 public class Main {
+
+
     //commands
     public static final String EXIT = "exit";
     public static final String HELP = "help";
@@ -24,7 +25,6 @@ public class Main {
     //messages
     //unknown msg
     public static final String UNKNOWN_COMMAND_MSG = "Unknown command.Type help to see available commands.";
-
     //exit msg
     public static final String BYE_MSG = "Bye!";
 
@@ -111,7 +111,7 @@ public class Main {
     //getshow msg
     public static final String SHOW_NOT_EXIST = "Show does not exist.";
     public static final String SHOW_INFO = """
-                                        Show Date: %s Author: %s";
+                                        Show Date: %s Author: %s"
                                         Video: %s
                                         """;
 
@@ -124,13 +124,99 @@ public class Main {
     public static final String CANNOT_REMOVE_SHOW_VIDEO = "Cannot remove: video is used in a show.";
 
 
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        Commands(in);
+        in.close();
+    }
 
+    private static void Commands(Scanner in) {
+        Youvideo yv = new YouvideoClass();
+        String command;
+        do{
+            command = in.next().toLowerCase();
+            switch(command){
+                case EXIT -> System.out.println(BYE_MSG);
+                case HELP -> System.out.println(HELP_MSG);
+                case CREATE_PUBLISHABLE -> createPublishable(in, yv);
+                case CREATE_PREMIUM -> createPremium(in, yv);
+                case ADD_SUBTITLE -> addSubtitle(in, yv);
+                case GET_VIDEO -> getVideoData(in, yv);
+                case SUBTITLES -> listSubtitles(in, yv);
+                case CREATE_PODCAST -> createPodcast(in, yv);
+                case ADD_EPISODE -> addEpisode(in, yv);
+                case GET_PODCAST -> getPodcastData(in, yv);
+                case EPISODES -> listEpisodes(in, yv);
+                case AUTHOR_PODCASTS -> listPodcasts(in, yv);
+                case REMOVE_PODCAST -> removePodcast(in, yv);
+                case CREATE_SHOW -> createShow(in, yv);
+                case GET_SHOW -> getShowData(in, yv);
+                case REMOVE_SHOW -> removeShow(in, yv);
+                case REMOVE_VIDEO -> removeVideo(in, yv);
+                default -> System.out.println(UNKNOWN_COMMAND_MSG);
+            }
+        }while(!command.equals(EXIT));
+    }
 
+    private static void removeShow(Scanner in, Youvideo yv) {
+        System.out.println("removeShowData");
+    }
 
+    private static void removeVideo(Scanner in, Youvideo yv) {
+        System.out.println("removeVideo");
+    }
 
+    private static void getShowData(Scanner in, Youvideo yv) {
+        System.out.println("getShowData");
+    }
 
+    private static void createShow(Scanner in, Youvideo yv) {
+        System.out.println("createShow");
+    }
 
+    private static void removePodcast(Scanner in, Youvideo yv) {
+        System.out.println("removePodcast");
+    }
 
+    private static void listPodcasts(Scanner in, Youvideo yv) {
+        System.out.println("list Podcasts");
+    }
+
+    private static void listEpisodes(Scanner in, Youvideo yv) {
+        System.out.println("ListEpisodes");
+    }
+
+    private static void getPodcastData(Scanner in, Youvideo yv) {
+        System.out.println("getPodcastData");
+    }
+
+    private static void addEpisode(Scanner in, Youvideo yv) {
+        System.out.println("addEpisode");
+    }
+
+    private static void createPodcast(Scanner in, Youvideo yv) {
+        System.out.println("create Podcast");
+    }
+
+    private static void listSubtitles(Scanner in, Youvideo yv) {
+        System.out.println("list Subtitles");
+    }
+
+    private static void getVideoData(Scanner in, Youvideo yv) {
+        System.out.println("getVideoData");
+    }
+
+    private static void addSubtitle(Scanner in, Youvideo yv) {
+        System.out.println("addSubtitle");
+    }
+
+    private static void createPremium(Scanner in, Youvideo yv) {
+        System.out.println("create Premium ");
+    }
+
+    private static void createPublishable(Scanner in, Youvideo yv) {
+        System.out.println("Create Publishable");
+    }
 
 
 }
