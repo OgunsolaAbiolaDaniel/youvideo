@@ -87,8 +87,9 @@ public interface Youvideo {
      * @param author   The name of the podcast creator or author.
      * @param langCode A two-character language code (e.g., "en", "pt").
      */
-    void createPodcast(String title, String author, String langCode);
 
+    void createPodcast(String title, String author, String langCode);
+    public boolean podcastExist(String title);
     /**
      * Adds a new episode to an existing podcast.
      * <p>

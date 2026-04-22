@@ -203,7 +203,21 @@ public class Main {
     }
 
     private static void createPodcast(Scanner in, Youvideo yv) {
-        System.out.println("create Podcast");
+        String title= in.next();
+        String author = in.next();
+        String lang = in.next();
+
+        if(yv.podcastExist(title)){
+            System.out.println(PODCAST_TITLE_EXISTS);
+            return;
+        }
+        if(!isValidLanguageCode(lang)){
+            System.out.println(INVALID_LANGUAGE_TYPE);
+            return;
+        };
+        yv.createPodcast(title,author,lang);
+        System.out.println(PODCAST_CREATED_SUCCESSFULLY);
+
     }
 
 

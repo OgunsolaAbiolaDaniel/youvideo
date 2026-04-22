@@ -1,5 +1,6 @@
 package youvideo.core;
 import youvideo.podcast.Podcast;
+import youvideo.podcast.PodcastClass;
 import youvideo.show.Show;
 import youvideo.video.PremiumVideo;
 import youvideo.video.PublishableVideo;
@@ -81,11 +82,21 @@ showTitleExists(String title)
     }
 
 
-
+    /**
+     * check if podcast exist;
+     * */
+    public boolean podcastExist(String title) {
+        for (int i = 0; i < podcasts.size(); i++) {
+            if (podcasts.get(i).getTitle().equals(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void createPodcast(String title, String author, String langCode) {
-
+        podcasts.insertLast(new PodcastClass(title,author,langCode));
     }
 
     @Override
