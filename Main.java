@@ -1,5 +1,12 @@
 import java.util.Scanner;
+
+import dataStructures.Array;
 import youvideo.core.*;
+import youvideo.subtitle.Subtitle;
+import youvideo.video.PremiumVideo;
+import youvideo.video.PublishableVideo;
+import youvideo.video.VideoClass;
+
 public class Main {
 
     //commands
@@ -26,7 +33,9 @@ public class Main {
     public static final String UNKNOWN_COMMAND_MSG = "Unknown command.Type help to see available commands.";
     //exit msg
     public static final String BYE_MSG = "Bye!";
-
+    //miniconstant
+    public static final String PREMIUM = "PREMIUM";
+    public static final String VIDEO = "Video";
     //help msg
     public static final String HELP_MSG = """
         createpublishable - creates a new publishable video
@@ -63,7 +72,7 @@ public class Main {
     public static final String PREMIUM_VIDEO_REQUIRED = "This operation requires a Premium video.";
 
     //getvideo msg
-    public static final String VIDEO_INFO = "Video %s %d Title: %s";
+    public static final String VIDEO_INFO = "%s %s %d Title: %s";
     public static final String VIDEO_FILE_INFO = "File: %s Publisher: %s Language: %s";
     public static final String PUBLISHABLE_VIDEO_NOT_EXIST = "Publishable Video %s does not exist.";
 
@@ -194,21 +203,86 @@ public class Main {
     }
 
     private static void createPodcast(Scanner in, Youvideo yv) {
-        System.out.println("create Podcast");
+        String title= in.next();
+        String author = in.next();
+        String lang = in.next();
+
+        if(yv.podcastExist(title)){
+            System.out.println(PODCAST_TITLE_EXISTS);
+            return;
+        }
+        if(!isValidLanguageCode(lang)){
+            System.out.println(INVALID_LANGUAGE_TYPE);
+            return;
+        };
+        yv.createPodcast(title,author,lang);
+        System.out.println(PODCAST_CREATED_SUCCESSFULLY);
+
     }
 
+
+
+//commit -5
     private static void listSubtitles(Scanner in, Youvideo yv) {
-        System.out.println("list Subtitles");
+        String v_id = in.next();
+        if(!yv.videoIdExist(v_id) || !yv.isVideoInstance(v_id, PremiumVideo.class)){
+            System.out.println(NO_PREMIUM_VIDEO);
+            return;
+        };
+        PremiumVideo video = (PremiumVideo) yv.findVideoById(v_id);
+        System.out.printf(SUBTITLES_HEADER + "%n",video.getTitle());
+       Array<Subtitle> subtitles= video.getSubtitles();
+       String suburl ="";
+       String subLang = "";
+        for(int i = 0; i<subtitles.size();i++){
+            suburl = subtitles.get(i).getSubtitleUrl();
+            subLang = subtitles.get(i).getLanguage();
+            System.out.printf(SUBTITLE_INFO+ "%n", suburl,subLang);
+        };
     }
 
+
+//commit -4
     private static void getVideoData(Scanner in, Youvideo yv) {
-        System.out.println("getVideoData");
+        String v_id = in.next();
+        if(!yv.videoIdExist(v_id)){
+            System.out.printf(PUBLISHABLE_VIDEO_NOT_EXIST + "%n",v_id);
+            return;
+        }
+        String v_type = VIDEO;
+        if(yv.isVideoInstance(v_id, PremiumVideo.class)){
+            v_type= PREMIUM;
+        }
+        PublishableVideo video = (PublishableVideo) yv.findVideoById(v_id);
+        System.out.printf(VIDEO_INFO + "%n",v_type,video.getUid(),video.getDuration(),video.getTitle());
+        System.out.printf(VIDEO_FILE_INFO + "%n",video.getFileLocation(),video.getPublisher(),video.getLanguage());
     }
 
+
+
+    //done commit- 3
     private static void addSubtitle(Scanner in, Youvideo yv) {
-        System.out.println("addSubtitle");
-    }
+        String id = in.next();
+        String subUrl = in.next();
+        String subLang = in.next();
+        if(!yv.videoIdExist(id)){
+            System.out.println(VIDEO_NOT_EXIST);
+            return;
+        }
+        if(!isValidLanguageCode(subLang)){
+            System.out.println(INVALID_LANGUAGE_TYPE_IN_SUBTITLE);
+        }
+        if(!yv.isVideoInstance(id, PremiumVideo.class)){
+            System.out.println(PREMIUM_VIDEO_REQUIRED);
+        };
 
+        yv.addSubtitle(id,subUrl,subLang);
+        System.out.println(SUBTITLE_ADDED_SUCCESSFULLY);
+    };
+
+
+
+//done---commit 2
     private static void createPremium(Scanner in, Youvideo yv) {
       String id = in.next();
       if(!in.hasNextInt()){
@@ -217,7 +291,7 @@ public class Main {
           return;
       };
       int duration = in.nextInt();
-      String url = in.nextLine();
+      String url = in.next();
       String publisher = in.next();
       String title = in.next();
       String langCode = in.next();
@@ -240,7 +314,7 @@ public class Main {
             return;
         };
         yv.createPremium(id,duration,url,publisher,title,langCode,subUrl,subLang);
-        //TODO output match;
+        //TODO output match  reformat this output;
         System.out.printf("PREMIUM"+(VIDEO_CREATED_SUCCESSFULLY)+ "%n", id);
     }
 

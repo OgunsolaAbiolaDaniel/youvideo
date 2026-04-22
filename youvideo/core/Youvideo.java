@@ -1,5 +1,7 @@
 package youvideo.core;
 
+import youvideo.video.VideoClass;
+
 public interface Youvideo {
     /**
      * checks if video already exist in the array
@@ -10,7 +12,16 @@ public interface Youvideo {
      * */
     public abstract boolean videoIdExist(String uid);
 
+    /**
+     * to check if the videoId is an instance of the class given... a general approach just in case
+     * i need it later
+     * */
+    public abstract boolean isVideoInstance(String videoId, Class<?> targetClass);
 
+    /**
+     * find video by id
+     * */
+    public abstract VideoClass findVideoById(String videoId);
 
     /**
      * Creates a new publishable video.
@@ -26,7 +37,7 @@ public interface Youvideo {
      * Creates a new premium video entry with subtitle support.
      * * @param id          The unique identifier for the video.
      *
-     * @param i
+     * @param id
      * @param duration  The playback duration of the video.
      * @param url       The primary video stream or file URL.
      * @param publisher The entity responsible for publishing the content.
@@ -54,7 +65,7 @@ public interface Youvideo {
      *
      * @param videoId The unique identifier of the video to be retrieved.
      */
-    void getVideo(String videoId);
+   // void getVideo(String videoId);//this is not needed yet .. i think i will delete it
     /**
      * Lists all subtitles associated with a specific premium video.
      * <p>
@@ -64,7 +75,7 @@ public interface Youvideo {
      *
      * @param videoId The unique identifier of the premium video whose subtitles are to be listed.
      */
-    void subtitles(String videoId);
+
     /**
      * Creates a new podcast with no episodes.
      * <p>
@@ -76,8 +87,9 @@ public interface Youvideo {
      * @param author   The name of the podcast creator or author.
      * @param langCode A two-character language code (e.g., "en", "pt").
      */
-    void createPodcast(String title, String author, String langCode);
 
+    void createPodcast(String title, String author, String langCode);
+    public boolean podcastExist(String title);
     /**
      * Adds a new episode to an existing podcast.
      * <p>

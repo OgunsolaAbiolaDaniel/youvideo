@@ -1,5 +1,6 @@
 package youvideo.core;
 import youvideo.podcast.Podcast;
+import youvideo.podcast.PodcastClass;
 import youvideo.show.Show;
 import youvideo.video.PremiumVideo;
 import youvideo.video.PublishableVideo;
@@ -40,6 +41,29 @@ showTitleExists(String title)
         }
         return false;
     }
+    //instance of checker ..for me to be able to know if its an instance of a class
+    public boolean isVideoInstance(String videoId, Class<?> targetClass) {
+        for (int i = 0; i < videos.size(); i++) {
+            VideoClass video = videos.get(i);
+            if (video.getUid().equals(videoId)) {
+                return targetClass.isInstance(video);
+            }
+        }
+        return false;
+    }
+
+    public VideoClass findVideoById(String videoId) {
+        for (int i = 0; i < videos.size(); i++) {
+            VideoClass video = videos.get(i);
+            if (video.getUid().equals(videoId)) {
+                return video;
+            }
+        }
+        return null;
+    }
+
+
+
 
     @Override
     public void createPublishable(String id, int duration, String url, String publisher, String title, String langCode) {
@@ -48,27 +72,31 @@ showTitleExists(String title)
 
     @Override
     public void createPremium(String id, int duration, String url, String publisher, String title, String langCode, String subUrl, String subLang) {
-        videos.insertLast(new PremiumVideo(id,duration,url,publisher,title,langCode,subUrl,subLang));
+        videos.insertLast(new PremiumVideo(id,duration,url,langCode,title,publisher,subUrl,subLang));
     }
 
     @Override
     public void addSubtitle(String videoId, String subtitleUrl, String subtitleLanguage) {
-
+          PremiumVideo video = (PremiumVideo) findVideoById(videoId);
+          video.addSubtitle(videoId,subtitleUrl,subtitleLanguage);
     }
 
-    @Override
-    public void getVideo(String videoId) {
 
-    }
-
-    @Override
-    public void subtitles(String videoId) {
-
+    /**
+     * check if podcast exist;
+     * */
+    public boolean podcastExist(String title) {
+        for (int i = 0; i < podcasts.size(); i++) {
+            if (podcasts.get(i).getTitle().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void createPodcast(String title, String author, String langCode) {
-
+        podcasts.insertLast(new PodcastClass(title,author,langCode));
     }
 
     @Override
