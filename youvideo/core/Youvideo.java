@@ -7,23 +7,28 @@ import youvideo.video.VideoClass;
 
 public interface Youvideo {
     /**
-     * checks if video already exist in the array
-     * @param uid
-     * i think i should be able to have same method with diff param--
-     * what's the essence of polymorphism
-     * @return boolean value <code>true</code> or <code>false</code>
-     * */
+     * Checks whether a video identifier already exists in the platform.
+     *
+     * @param uid identifier to search for
+     * @return {@code true} if a video with that identifier exists, {@code false} otherwise
+     */
     public abstract boolean videoIdExist(String uid);
 
     /**
-     * to check if the videoId is an instance of the class given... a general approach just in case
-     * i need it later
-     * */
+     * Checks whether a stored video belongs to a given runtime type.
+     *
+     * @param videoId identifier of the video to inspect
+     * @param targetClass class expected for the video
+     * @return {@code true} if the video exists and is an instance of {@code targetClass}
+     */
     public abstract boolean isVideoInstance(String videoId, Class<?> targetClass);
 
     /**
-     * find video by id
-     * */
+     * Finds a video by its identifier.
+     *
+     * @param videoId identifier of the video to retrieve
+     * @return the matching video, or {@code null} if it does not exist
+     */
     public abstract VideoClass findVideoById(String videoId);
 
     /**
@@ -33,22 +38,21 @@ public interface Youvideo {
      * @param url       The source URL where the video file is hosted.
      * @param publisher The name of the entity or user publishing the video.
      * @param title     The display title of the video.
-     * @param langCode      The specific reference or promotional code associated with the video.
+     * @param langCode two-letter language code of the video
      */
     void createPublishable(String id, int duration, String url, String publisher, String title, String langCode);
     /**
      * Creates a new premium video entry with subtitle support.
-     * * @param id          The unique identifier for the video.
-     *
-     * @param id
+     * @param id          The unique identifier for the video.
      * @param duration  The playback duration of the video.
      * @param url       The primary video stream or file URL.
      * @param publisher The entity responsible for publishing the content.
      * @param title     The descriptive title of the premium video.
      * @param langCode  The ISO language code for the primary audio (e.g., "en", "es").
      * @param subUrl    The URL pointing to the subtitle file (e.g., .srt or .vtt).
+     * @param subLang   The language code of the initial subtitle.
      */
-   void createPremium(String id, int i, String duration, String url, String publisher, String title, String langCode, String subUrl);
+   void createPremium(String id, int duration, String url, String publisher, String title, String langCode, String subUrl, String subLang);
     /**
      * Adds a new subtitle to an existing premium video.
      * <p>
@@ -92,10 +96,46 @@ public interface Youvideo {
      */
 
     void createPodcast(String title, String author, String langCode);
+
+    /**
+     * Checks whether a podcast with the given title exists.
+     *
+     * @param title title to search for
+     * @return {@code true} if the podcast exists
+     */
     public boolean podcastExist(String title);
+
+    /**
+     * Finds a podcast by title.
+     *
+     * @param title title of the podcast to retrieve
+     * @return the matching podcast, or {@code null} if it does not exist
+     */
     public Podcast findPodcastByTitle(String title);
+
+    /**
+     * Checks whether an episode identifier is already in use.
+     *
+     * @param id episode identifier to search for
+     * @return {@code true} if the identifier is already used by a video
+     */
     public boolean episode_Exist(String id);
+
+    /**
+     * Validates whether an episode date can be appended to a podcast.
+     *
+     * @param podcastTitle title of the podcast receiving the new episode
+     * @param releaseDate release date to validate
+     * @return {@code true} if the date is valid for insertion
+     */
     public boolean isEpisodeDateValid(String podcastTitle, String releaseDate);
+
+    /**
+     * Returns all podcasts written by a given author.
+     *
+     * @param authorName author whose podcasts should be retrieved
+     * @return podcasts found for that author, in insertion order
+     */
     public Array<Podcast> podcastsByAuthor(String authorName);
     /**
      * Adds a new episode to an existing podcast.
@@ -169,8 +209,29 @@ public interface Youvideo {
      * @param transmissionDate The date the show is scheduled to be broadcast.
      */
     void createShow(String author, String videoId, String transmissionDate);
+
+    /**
+     * Checks whether a show with the given title exists.
+     *
+     * @param title title to search for
+     * @return {@code true} if the show exists
+     */
     public boolean showTitleExist(String title);
+
+    /**
+     * Finds a show by title.
+     *
+     * @param title title of the show to retrieve
+     * @return the matching show, or {@code null} if it does not exist
+     */
     public Show findShowByTitle(String title);
+
+    /**
+     * Checks whether a video is currently referenced by a show.
+     *
+     * @param videoId identifier of the video to inspect
+     * @return {@code true} if the video is used in a show
+     */
     public boolean isVideoUsedInShow(String videoId);
 
     /**

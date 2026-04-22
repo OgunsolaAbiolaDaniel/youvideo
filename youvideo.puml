@@ -1,27 +1,144 @@
 @startuml
-'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+package "youvideo.core" {
+    interface Youvideo {
+        +videoIdExist(uid: String): boolean
+        +isVideoInstance(videoId: String, targetClass: Class): boolean
+        +findVideoById(videoId: String): VideoClass
+        +createPublishable(id: String, duration: int, url: String, publisher: String, title: String, langCode: String)
+        +createPremium(id: String, duration: int, url: String, publisher: String, title: String, langCode: String, subUrl: String, subLang: String)
+        +addSubtitle(videoId: String, subtitleUrl: String, subtitleLanguage: String)
+        +createPodcast(title: String, author: String, langCode: String)
+        +podcastExist(title: String): boolean
+        +findPodcastByTitle(title: String): Podcast
+        +episode_Exist(id: String): boolean
+        +isEpisodeDateValid(podcastTitle: String, releaseDate: String): boolean
+        +podcastsByAuthor(authorName: String): Array<Podcast>
+        +addEpisode(podcastTitle: String, episodeId: String, duration: int, url: String, releaseDate: String)
+        +getPodcast(title: String)
+        +episodes(title: String)
+        +authorPodcasts(authorName: String)
+        +removePodcast(title: String)
+        +createShow(author: String, videoId: String, transmissionDate: String)
+        +showTitleExist(title: String): boolean
+        +findShowByTitle(title: String): Show
+        +isVideoUsedInShow(videoId: String): boolean
+        +getShow(title: String)
+        +removeShow(title: String)
+        +removeVideo(videoId: String)
+    }
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+    class YouvideoClass {
+        -videos: Array<VideoClass>
+        -podcasts: Array<Podcast>
+        -shows: Array<Show>
+    }
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+package "youvideo.video" {
+    abstract class VideoClass {
+        #uid: String
+        #duration: int
+        #fileLocation: String
+        #language: String
+        +getUid(): String
+        +getDuration(): int
+        +getFileLocation(): String
+        +getLanguage(): String
+    }
+
+    class PublishableVideo {
+        #title: String
+        #publisher: String
+        +getTitle(): String
+        +getPublisher(): String
+    }
+
+    class PremiumVideo {
+        -subtitles: Array<Subtitle>
+        +getSubtitles(): Array<Subtitle>
+        +addSubtitle(v_uid: String, subtitleUrl: String, subtitleLanguage: String)
+    }
+
+    class EpisodeClass {
+        -releaseDate: String
+        +getReleaseDate(): String
+    }
 }
+
+package "youvideo.podcast" {
+    interface Podcast {
+        +getTitle(): String
+        +getLanguage(): String
+        +getAuthor(): String
+        +getEpisodes(): Array<EpisodeClass>
+        +addEpisode(episode: EpisodeClass)
+    }
+
+    class PodcastClass {
+        -title: String
+        -author: String
+        -language: String
+        -vid_collection: Array<EpisodeClass>
+    }
+}
+
+package "youvideo.show" {
+    interface Show {
+        +getTitle(): String
+        +getAuthor(): String
+        +getTransmissionDate(): String
+        +getVideo(): PublishableVideo
+    }
+
+    class ShowClass {
+        -title: String
+        -author: String
+        -transmissionDate: String
+        -video: PublishableVideo
+    }
+}
+
+package "youvideo.subtitle" {
+    interface Subtitle {
+        +getVideoId(): String
+        +setVideoId(videoId: String)
+        +getSubtitleUrl(): String
+        +setSubtitleUrl(subtitleUrl: String)
+        +getLanguage(): String
+        +setLanguage(language: String)
+    }
+
+    class SubtitleClass {
+        -language: String
+        -videoId: String
+        -subtitleUrl: String
+    }
+}
+
+Youvideo <|.. YouvideoClass
+Podcast <|.. PodcastClass
+Show <|.. ShowClass
+Subtitle <|.. SubtitleClass
+
+VideoClass <|-- PublishableVideo
+VideoClass <|-- EpisodeClass
+PublishableVideo <|-- PremiumVideo
+
+YouvideoClass o-- "0..*" VideoClass : videos
+YouvideoClass o-- "0..*" Podcast : podcasts
+YouvideoClass o-- "0..*" Show : shows
+
+Podcast "1" o-- "0..*" EpisodeClass : episodes
+Show "1" --> "1" PublishableVideo : video
+PremiumVideo "1" o-- "1..*" Subtitle : subtitles
+
+YouvideoClass ..> PodcastClass : creates
+YouvideoClass ..> ShowClass : creates
+YouvideoClass ..> PublishableVideo : creates
+YouvideoClass ..> PremiumVideo : creates
+YouvideoClass ..> EpisodeClass : creates
 
 @enduml
