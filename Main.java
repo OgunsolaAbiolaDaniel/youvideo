@@ -2,7 +2,10 @@ import java.util.Scanner;
 
 import dataStructures.Array;
 import youvideo.core.*;
+import youvideo.podcast.Podcast;
+import youvideo.show.Show;
 import youvideo.subtitle.Subtitle;
+import youvideo.video.EpisodeClass;
 import youvideo.video.PremiumVideo;
 import youvideo.video.PublishableVideo;
 import youvideo.video.VideoClass;
@@ -100,7 +103,7 @@ public class Main {
     public static final String NO_EPISODES_AVAILABLE = "No episodes available for this podcast.";
     public static final String EPISODES_HEADER = "Episodes for podcast %s:";
     public static final String EPISODE_INFO = """
-                                            Episode %s: %d min Date: %s";
+                                            Episode %s: %d min Date: %s
                                             URL: %s
                                             """;
 
@@ -119,7 +122,7 @@ public class Main {
     //getshow msg
     public static final String SHOW_NOT_EXIST = "Show does not exist.";
     public static final String SHOW_INFO = """
-                                        Show Date: %s Author: %s"
+                                        Show Date: %s Author: %s
                                         Video: %s
                                         """;
 
@@ -167,41 +170,155 @@ public class Main {
     }
 
     private static void removeShow(Scanner in, Youvideo yv) {
-        System.out.println("removeShowData");
+        String title = in.next();
+        if(!yv.showTitleExist(title)){
+            System.out.println(SHOW_NOT_EXIST);
+            return;
+        }
+        yv.removeShow(title);
+        System.out.println(SHOW_REMOVED_SUCCESSFULLY);
     }
 
     private static void removeVideo(Scanner in, Youvideo yv) {
-        System.out.println("removeVideo");
+        String videoId = in.next();
+        if(!yv.videoIdExist(videoId)){
+            System.out.printf(PUBLISHABLE_VIDEO_NOT_EXIST + "%n",videoId);
+            return;
+        }
+        if(yv.isVideoInstance(videoId, EpisodeClass.class)){
+            System.out.println(CANNOT_REMOVE_EPISODE_VIDEO);
+            return;
+        }
+        if(yv.isVideoUsedInShow(videoId)){
+            System.out.println(CANNOT_REMOVE_SHOW_VIDEO);
+            return;
+        }
+        yv.removeVideo(videoId);
+        System.out.println(VIDEO_REMOVED_SUCCESSFULLY);
     }
 
     private static void getShowData(Scanner in, Youvideo yv) {
-        System.out.println("getShowData");
+        String title = in.next();
+        Show show = yv.findShowByTitle(title);
+        if(show == null){
+            System.out.println(SHOW_NOT_EXIST);
+            return;
+        }
+        String videoType = VIDEO;
+        if(show.getVideo() instanceof PremiumVideo){
+            videoType = PREMIUM;
+        }
+        System.out.printf(SHOW_INFO + "%n",show.getTransmissionDate(),show.getAuthor(),videoType + " " + show.getVideo().getTitle());
     }
 
     private static void createShow(Scanner in, Youvideo yv) {
-        System.out.println("createShow");
+        String author = in.next();
+        String videoId = in.next();
+        String transmissionDate = in.next();
+        if(!yv.videoIdExist(videoId) || !yv.isVideoInstance(videoId, PublishableVideo.class)){
+            System.out.println(VIDEO_FOR_SHOW_NOT_EXIST);
+            return;
+        }
+        PublishableVideo video = (PublishableVideo) yv.findVideoById(videoId);
+        if(yv.showTitleExist(video.getTitle())){
+            System.out.println(SHOW_TITLE_ALREADY_EXISTS);
+            return;
+        }
+        yv.createShow(author,videoId,transmissionDate);
+        System.out.println(SHOW_CREATED_SUCCESSFULLY);
     }
 
     private static void removePodcast(Scanner in, Youvideo yv) {
-        System.out.println("removePodcast");
+        String title = in.next();
+        if(!yv.podcastExist(title)){
+            System.out.println(PODCAST_NOT_EXIST);
+            return;
+        }
+        yv.removePodcast(title);
+        System.out.println(PODCAST_REMOVED_SUCCESSFULLY);
     }
 
     private static void listPodcasts(Scanner in, Youvideo yv) {
-        System.out.println("list Podcasts");
+        String authorName = in.next();
+        Array<Podcast> podcasts = yv.podcastsByAuthor(authorName);
+        if(podcasts.size() == 0){
+            System.out.println(NO_PODCASTS_FOR_AUTHOR);
+            return;
+        }
+        System.out.printf(AUTHOR_PODCASTS_HEADER + "%n",authorName);
+        for(int i = 0; i < podcasts.size(); i++){
+            Podcast podcast = podcasts.get(i);
+            Array<EpisodeClass> episodes = podcast.getEpisodes();
+            String latestDate = episodes.size() == 0 ? "-" : episodes.get(episodes.size() - 1).getReleaseDate();
+            System.out.printf(PODCAST_INFO,podcast.getTitle(),podcast.getAuthor(),podcast.getLanguage(),latestDate);
+        }
     }
 
     private static void listEpisodes(Scanner in, Youvideo yv) {
-        System.out.println("ListEpisodes");
+        String title = in.next();
+        if(!yv.podcastExist(title)){
+            System.out.println(PODCAST_NOT_EXIST);
+            return;
+        }
+        Podcast podcast = yv.findPodcastByTitle(title);
+        Array<EpisodeClass> episodes = podcast.getEpisodes();
+        if(episodes.size() == 0){
+            System.out.println(NO_EPISODES_AVAILABLE);
+            return;
+        }
+        System.out.printf(EPISODES_HEADER + "%n",title);
+        for(int i = episodes.size() - 1; i >= 0; i--){
+            EpisodeClass episode = episodes.get(i);
+            System.out.printf(EPISODE_INFO + "%n",episode.getUid(),episode.getDuration(),episode.getReleaseDate(),episode.getFileLocation());
+        }
     }
 
     private static void getPodcastData(Scanner in, Youvideo yv) {
-        System.out.println("getPodcastData");
+        String title = in.next();
+        if(!yv.podcastExist(title)){
+            System.out.println(PODCAST_NOT_EXIST);
+            return;
+        }
+        Podcast podcast = yv.findPodcastByTitle(title);
+        Array<EpisodeClass> episodes = podcast.getEpisodes();
+        String latestDate = episodes.size() == 0 ? "-" : episodes.get(episodes.size() - 1).getReleaseDate();
+        System.out.printf(PODCAST_INFO,podcast.getTitle(),podcast.getAuthor(),podcast.getLanguage(),latestDate);
     }
 
     private static void addEpisode(Scanner in, Youvideo yv) {
-        System.out.println("addEpisode");
+        String podTitle = in.next();
+        String uid = in.next();
+        if (!in.hasNextInt()) {
+            System.out.println(INVALID_VALUE);
+            in.next();
+            return;
+        }
+        int duration = in.nextInt();
+        String url = in.next();
+        String date = in.next();
+
+        if(duration <= 0){
+            System.out.println(INVALID_VALUE);
+            return;
+        }
+        if(!yv.podcastExist(podTitle)){
+            System.out.println(PODCAST_NOT_EXIST);
+            return;
+        }
+        if(yv.episode_Exist(uid)){
+            System.out.println(EPISODE_ID_EXISTS);
+            return;
+        }
+        if(!yv.isEpisodeDateValid(podTitle, date)){
+            System.out.println(EPISODE_DATE_INVALID);
+            return;
+        }
+        yv.addEpisode(podTitle, uid, duration, url, date);
+        System.out.println(EPISODE_ADDED_SUCCESSFULLY);
     }
 
+
+    //done
     private static void createPodcast(Scanner in, Youvideo yv) {
         String title= in.next();
         String author = in.next();
@@ -271,9 +388,11 @@ public class Main {
         }
         if(!isValidLanguageCode(subLang)){
             System.out.println(INVALID_LANGUAGE_TYPE_IN_SUBTITLE);
+            return;
         }
         if(!yv.isVideoInstance(id, PremiumVideo.class)){
             System.out.println(PREMIUM_VIDEO_REQUIRED);
+            return;
         };
 
         yv.addSubtitle(id,subUrl,subLang);
@@ -315,7 +434,7 @@ public class Main {
         };
         yv.createPremium(id,duration,url,publisher,title,langCode,subUrl,subLang);
         //TODO output match  reformat this output;
-        System.out.printf("PREMIUM"+(VIDEO_CREATED_SUCCESSFULLY)+ "%n", id);
+        System.out.printf("PREMIUM " + VIDEO_CREATED_SUCCESSFULLY + "%n", id);
     }
 
 

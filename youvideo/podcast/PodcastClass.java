@@ -30,5 +30,13 @@ public class PodcastClass implements Podcast {
     public String getLanguage(){
         return this.language;
     }
+    public Array<EpisodeClass> getEpisodes(){
+        return this.vid_collection;
+    }
+    public void addEpisode(EpisodeClass episode){
+        vid_collection.insertLast(episode);
+    }
+
+
 
 }
