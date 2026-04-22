@@ -80,15 +80,8 @@ showTitleExists(String title)
           video.addSubtitle(videoId,subtitleUrl,subtitleLanguage);
     }
 
-    @Override
-    public void getVideo(String videoId) {
 
-    }
 
-    @Override
-    public void subtitles(String videoId) {
-
-    }
 
     @Override
     public void createPodcast(String title, String author, String langCode) {

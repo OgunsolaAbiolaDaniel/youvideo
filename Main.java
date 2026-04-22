@@ -1,5 +1,8 @@
 import java.util.Scanner;
+
+import dataStructures.Array;
 import youvideo.core.*;
+import youvideo.subtitle.Subtitle;
 import youvideo.video.PremiumVideo;
 import youvideo.video.PublishableVideo;
 import youvideo.video.VideoClass;
@@ -203,8 +206,25 @@ public class Main {
         System.out.println("create Podcast");
     }
 
+
+
+//commit -5
     private static void listSubtitles(Scanner in, Youvideo yv) {
-        System.out.println("list Subtitles");
+        String v_id = in.next();
+        if(!yv.videoIdExist(v_id) || !yv.isVideoInstance(v_id, PremiumVideo.class)){
+            System.out.println(NO_PREMIUM_VIDEO);
+            return;
+        };
+        PremiumVideo video = (PremiumVideo) yv.findVideoById(v_id);
+        System.out.printf(SUBTITLES_HEADER + "%n",video.getTitle());
+       Array<Subtitle> subtitles= video.getSubtitles();
+       String suburl ="";
+       String subLang = "";
+        for(int i = 0; i<subtitles.size();i++){
+            suburl = subtitles.get(i).getSubtitleUrl();
+            subLang = subtitles.get(i).getLanguage();
+            System.out.printf(SUBTITLE_INFO+ "%n", suburl,subLang);
+        };
     }
 
 

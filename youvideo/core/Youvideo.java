@@ -37,7 +37,7 @@ public interface Youvideo {
      * Creates a new premium video entry with subtitle support.
      * * @param id          The unique identifier for the video.
      *
-     * @param i
+     * @param id
      * @param duration  The playback duration of the video.
      * @param url       The primary video stream or file URL.
      * @param publisher The entity responsible for publishing the content.
@@ -65,7 +65,7 @@ public interface Youvideo {
      *
      * @param videoId The unique identifier of the video to be retrieved.
      */
-    void getVideo(String videoId);//this is not needed yet .. i think i will delete it
+   // void getVideo(String videoId);//this is not needed yet .. i think i will delete it
     /**
      * Lists all subtitles associated with a specific premium video.
      * <p>
@@ -75,7 +75,7 @@ public interface Youvideo {
      *
      * @param videoId The unique identifier of the premium video whose subtitles are to be listed.
      */
-    void subtitles(String videoId);
+
     /**
      * Creates a new podcast with no episodes.
      * <p>
