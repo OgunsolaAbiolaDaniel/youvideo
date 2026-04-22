@@ -39,7 +39,7 @@ showTitleExists(String title)
     @Override
     public boolean videoIdExist(String uid) {
         for (int i = 0; i < videos.size(); i++) {
-            if (videos.get(i).getUid().equals(uid)) {
+            if (videos.get(i).getUid().equalsIgnoreCase(uid)) {
                 return true;
             }
         }
@@ -49,7 +49,7 @@ showTitleExists(String title)
     public boolean isVideoInstance(String videoId, Class<?> targetClass) {
         for (int i = 0; i < videos.size(); i++) {
             VideoClass video = videos.get(i);
-            if (video.getUid().equals(videoId)) {
+            if (video.getUid().equalsIgnoreCase(videoId)) {
                 return targetClass.isInstance(video);
             }
         }
@@ -59,7 +59,7 @@ showTitleExists(String title)
     public VideoClass findVideoById(String videoId) {
         for (int i = 0; i < videos.size(); i++) {
             VideoClass video = videos.get(i);
-            if (video.getUid().equals(videoId)) {
+            if (video.getUid().equalsIgnoreCase(videoId)) {
                 return video;
             }
         }
@@ -144,7 +144,7 @@ showTitleExists(String title)
     @Override
     public Podcast findPodcastByTitle(String title) {
         for (int i = 0; i < podcasts.size(); i++) {
-            if (podcasts.get(i).getTitle().equals(title)) {
+            if (podcasts.get(i).getTitle().equalsIgnoreCase(title)) {
                 return podcasts.get(i);
             }
         }
@@ -215,7 +215,7 @@ showTitleExists(String title)
     @Override
     public Show findShowByTitle(String title) {
         for (int i = 0; i < shows.size(); i++) {
-            if (shows.get(i).getTitle().equals(title)) {
+            if (shows.get(i).getTitle().equalsIgnoreCase(title)) {
                 return shows.get(i);
             }
         }
@@ -227,7 +227,7 @@ showTitleExists(String title)
         Array<Podcast> authorPodcasts = new ArrayClass<>();
         for (int i = 0; i < podcasts.size(); i++) {
             Podcast podcast = podcasts.get(i);
-            if (podcast.getAuthor().equals(authorName)) {
+            if (podcast.getAuthor().equalsIgnoreCase(authorName)) {
                 authorPodcasts.insertLast(podcast);
             }
         }
@@ -237,7 +237,7 @@ showTitleExists(String title)
     @Override
     public boolean isVideoUsedInShow(String videoId) {
         for (int i = 0; i < shows.size(); i++) {
-            if (shows.get(i).getVideo().getUid().equals(videoId)) {
+            if (shows.get(i).getVideo().getUid().equalsIgnoreCase(videoId)) {
                 return true;
             }
         }
@@ -246,7 +246,7 @@ showTitleExists(String title)
 
     private int findPodcastIndexByTitle(String title) {
         for (int i = 0; i < podcasts.size(); i++) {
-            if (podcasts.get(i).getTitle().equals(title)) {
+            if (podcasts.get(i).getTitle().equalsIgnoreCase(title)) {
                 return i;
             }
         }
@@ -255,7 +255,7 @@ showTitleExists(String title)
 
     private int findShowIndexByTitle(String title) {
         for (int i = 0; i < shows.size(); i++) {
-            if (shows.get(i).getTitle().equals(title)) {
+            if (shows.get(i).getTitle().equalsIgnoreCase(title)) {
                 return i;
             }
         }
@@ -264,7 +264,7 @@ showTitleExists(String title)
 
     private void removeVideoById(String videoId) {
         for (int i = 0; i < videos.size(); i++) {
-            if (videos.get(i).getUid().equals(videoId)) {
+            if (videos.get(i).getUid().equalsIgnoreCase(videoId)) {
                 videos.removeAt(i);
                 return;
             }
