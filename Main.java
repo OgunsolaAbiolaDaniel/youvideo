@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import youvideo.core.*;
+import youvideo.video.PremiumVideo;
+
 public class Main {
 
     //commands
@@ -205,10 +207,31 @@ public class Main {
         System.out.println("getVideoData");
     }
 
-    private static void addSubtitle(Scanner in, Youvideo yv) {
-        System.out.println("addSubtitle");
-    }
 
+
+    //done commit- 3
+    private static void addSubtitle(Scanner in, Youvideo yv) {
+        String id = in.next();
+        String subUrl = in.next();
+        String subLang = in.next();
+        if(!yv.videoIdExist(id)){
+            System.out.println(VIDEO_NOT_EXIST);
+            return;
+        }
+        if(!isValidLanguageCode(subLang)){
+            System.out.println(INVALID_LANGUAGE_TYPE_IN_SUBTITLE);
+        }
+        if(!yv.isVideoInstance(id, PremiumVideo.class)){
+            System.out.println(PREMIUM_VIDEO_REQUIRED);
+        };
+
+        yv.addSubtitle(id,subUrl,subLang);
+        System.out.println(SUBTITLE_ADDED_SUCCESSFULLY);
+    };
+
+
+
+//done---commit 2
     private static void createPremium(Scanner in, Youvideo yv) {
       String id = in.next();
       if(!in.hasNextInt()){
@@ -240,7 +263,7 @@ public class Main {
             return;
         };
         yv.createPremium(id,duration,url,publisher,title,langCode,subUrl,subLang);
-        //TODO output match;
+        //TODO output match  reformat this output;
         System.out.printf("PREMIUM"+(VIDEO_CREATED_SUCCESSFULLY)+ "%n", id);
     }
 

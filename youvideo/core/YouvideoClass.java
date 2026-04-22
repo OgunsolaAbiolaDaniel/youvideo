@@ -40,6 +40,29 @@ showTitleExists(String title)
         }
         return false;
     }
+    //instance of checker ..for me to be able to know if its an instance of a class
+    public boolean isVideoInstance(String videoId, Class<?> targetClass) {
+        for (int i = 0; i < videos.size(); i++) {
+            VideoClass video = videos.get(i);
+            if (video.getUid().equals(videoId)) {
+                return targetClass.isInstance(video);
+            }
+        }
+        return false;
+    }
+
+    private VideoClass findVideoById(String videoId) {
+        for (int i = 0; i < videos.size(); i++) {
+            VideoClass video = videos.get(i);
+            if (video.getUid().equals(videoId)) {
+                return video;
+            }
+        }
+        return null;
+    }
+
+
+
 
     @Override
     public void createPublishable(String id, int duration, String url, String publisher, String title, String langCode) {
@@ -53,7 +76,8 @@ showTitleExists(String title)
 
     @Override
     public void addSubtitle(String videoId, String subtitleUrl, String subtitleLanguage) {
-
+          PremiumVideo video = (PremiumVideo) findVideoById(videoId);
+          video.addSubtitle(videoId,subtitleUrl,subtitleLanguage);
     }
 
     @Override

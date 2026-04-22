@@ -10,6 +10,11 @@ public interface Youvideo {
      * */
     public abstract boolean videoIdExist(String uid);
 
+    /**
+     * to check if the videoId is an instance of the class given... a general approach just in case
+     * i need it later
+     * */
+    public abstract boolean isVideoInstance(String videoId, Class<?> targetClass);
 
 
     /**

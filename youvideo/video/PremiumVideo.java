@@ -14,13 +14,12 @@ public class PremiumVideo extends PublishableVideo{
         subtitles.insertLast(new SubtitleClass(subtitleLang,uid,subtitleUrl));
     }
 
-  /*  public Array<Subtitle> getSubtitles() {
+    public Array<Subtitle> getSubtitles() {
         return subtitles;
     }
 
-   public void addSubtitle(Subtitle subtitle) {
-        subtitles.insertLast(new SubtitleClass());
-    }*/
-
+    public void addSubtitle(String v_uid ,String subtitleUrl,String subtitleLanguage) {
+        subtitles.insertLast(new SubtitleClass(subtitleLanguage,v_uid, subtitleUrl));
+    }
 
 }
