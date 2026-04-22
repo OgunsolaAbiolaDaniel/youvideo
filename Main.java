@@ -2,7 +2,6 @@ import java.util.Scanner;
 import youvideo.core.*;
 public class Main {
 
-
     //commands
     public static final String EXIT = "exit";
     public static final String HELP = "help";
@@ -211,8 +210,43 @@ public class Main {
     }
 
     private static void createPremium(Scanner in, Youvideo yv) {
-        System.out.println("create Premium ");
+      String id = in.next();
+      if(!in.hasNextInt()){
+          System.out.println(INVALID_VALUE);
+          in.next();
+          return;
+      };
+      int duration = in.nextInt();
+      String url = in.nextLine();
+      String publisher = in.next();
+      String title = in.next();
+      String langCode = in.next();
+      String subUrl =in.next();
+      String subLang = in.next();
+        if(duration<=0){
+            System.out.println(INVALID_VALUE);
+            return;
+        }
+        if(yv.videoIdExist(id)){
+            System.out.println(VIDEO_ID_EXISTS);
+            return;
+        }
+        if (!isValidLanguageCode(langCode)) {
+            System.out.println(INVALID_LANGUAGE_TYPE);
+            return;
+        }
+        if (!isValidLanguageCode(subLang)) {
+            System.out.println(INVALID_LANGUAGE_TYPE_IN_SUBTITLE);
+            return;
+        };
+        yv.createPremium(id,duration,url,publisher,title,langCode,subUrl,subLang);
+        //TODO output match;
+        System.out.printf("PREMIUM"+(VIDEO_CREATED_SUCCESSFULLY)+ "%n", id);
     }
+
+
+
+
     //checks whether code is a valid 2-letter alphabetic language code.
     private static boolean isValidLanguageCode(String code) {
         return code != null && code.matches("(?i)[a-z]{2}");

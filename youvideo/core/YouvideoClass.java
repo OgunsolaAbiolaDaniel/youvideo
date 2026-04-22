@@ -1,6 +1,7 @@
 package youvideo.core;
 import youvideo.podcast.Podcast;
 import youvideo.show.Show;
+import youvideo.video.PremiumVideo;
 import youvideo.video.PublishableVideo;
 import dataStructures.*;
 import youvideo.video.VideoClass;
@@ -42,12 +43,12 @@ showTitleExists(String title)
 
     @Override
     public void createPublishable(String id, int duration, String url, String publisher, String title, String langCode) {
-         videos.insertLast(new PublishableVideo(id, String.valueOf(duration), url, langCode, title, publisher));
+         videos.insertLast(new PublishableVideo(id, duration, url, langCode, title, publisher));
     }
 
     @Override
-    public void createPremium(String id, String duration, String url, String publisher, String title, String langCode, String subUrl, String subLang) {
-
+    public void createPremium(String id, int duration, String url, String publisher, String title, String langCode, String subUrl, String subLang) {
+        videos.insertLast(new PremiumVideo(id,duration,url,publisher,title,langCode,subUrl,subLang));
     }
 
     @Override

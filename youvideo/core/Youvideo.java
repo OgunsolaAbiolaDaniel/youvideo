@@ -25,15 +25,16 @@ public interface Youvideo {
     /**
      * Creates a new premium video entry with subtitle support.
      * * @param id          The unique identifier for the video.
-     * @param duration    The playback duration of the video.
-     * @param url         The primary video stream or file URL.
-     * @param publisher   The entity responsible for publishing the content.
-     * @param title       The descriptive title of the premium video.
-     * @param langCode    The ISO language code for the primary audio (e.g., "en", "es").
-     * @param subUrl      The URL pointing to the subtitle file (e.g., .srt or .vtt).
-     * @param subLang     The language of the provided subtitles.
+     *
+     * @param i
+     * @param duration  The playback duration of the video.
+     * @param url       The primary video stream or file URL.
+     * @param publisher The entity responsible for publishing the content.
+     * @param title     The descriptive title of the premium video.
+     * @param langCode  The ISO language code for the primary audio (e.g., "en", "es").
+     * @param subUrl    The URL pointing to the subtitle file (e.g., .srt or .vtt).
      */
-   void createPremium(String id, String duration, String url, String publisher, String title,String langCode,String subUrl, String subLang);
+   void createPremium(String id, int i, String duration, String url, String publisher, String title, String langCode, String subUrl);
     /**
      * Adds a new subtitle to an existing premium video.
      * <p>
