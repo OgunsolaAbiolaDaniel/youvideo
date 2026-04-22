@@ -1,5 +1,7 @@
 package youvideo.core;
 
+import youvideo.video.VideoClass;
+
 public interface Youvideo {
     /**
      * checks if video already exist in the array
@@ -16,6 +18,10 @@ public interface Youvideo {
      * */
     public abstract boolean isVideoInstance(String videoId, Class<?> targetClass);
 
+    /**
+     * find video by id
+     * */
+    public abstract VideoClass findVideoById(String videoId);
 
     /**
      * Creates a new publishable video.
@@ -59,7 +65,7 @@ public interface Youvideo {
      *
      * @param videoId The unique identifier of the video to be retrieved.
      */
-    void getVideo(String videoId);
+    void getVideo(String videoId);//this is not needed yet .. i think i will delete it
     /**
      * Lists all subtitles associated with a specific premium video.
      * <p>

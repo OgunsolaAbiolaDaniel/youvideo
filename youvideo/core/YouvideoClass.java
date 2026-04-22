@@ -51,7 +51,7 @@ showTitleExists(String title)
         return false;
     }
 
-    private VideoClass findVideoById(String videoId) {
+    public VideoClass findVideoById(String videoId) {
         for (int i = 0; i < videos.size(); i++) {
             VideoClass video = videos.get(i);
             if (video.getUid().equals(videoId)) {
@@ -71,7 +71,7 @@ showTitleExists(String title)
 
     @Override
     public void createPremium(String id, int duration, String url, String publisher, String title, String langCode, String subUrl, String subLang) {
-        videos.insertLast(new PremiumVideo(id,duration,url,publisher,title,langCode,subUrl,subLang));
+        videos.insertLast(new PremiumVideo(id,duration,url,langCode,title,publisher,subUrl,subLang));
     }
 
     @Override

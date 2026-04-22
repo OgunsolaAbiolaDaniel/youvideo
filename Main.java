@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import youvideo.core.*;
 import youvideo.video.PremiumVideo;
+import youvideo.video.PublishableVideo;
+import youvideo.video.VideoClass;
 
 public class Main {
 
@@ -28,7 +30,9 @@ public class Main {
     public static final String UNKNOWN_COMMAND_MSG = "Unknown command.Type help to see available commands.";
     //exit msg
     public static final String BYE_MSG = "Bye!";
-
+    //miniconstant
+    public static final String PREMIUM = "PREMIUM";
+    public static final String VIDEO = "Video";
     //help msg
     public static final String HELP_MSG = """
         createpublishable - creates a new publishable video
@@ -65,7 +69,7 @@ public class Main {
     public static final String PREMIUM_VIDEO_REQUIRED = "This operation requires a Premium video.";
 
     //getvideo msg
-    public static final String VIDEO_INFO = "Video %s %d Title: %s";
+    public static final String VIDEO_INFO = "%s %s %d Title: %s";
     public static final String VIDEO_FILE_INFO = "File: %s Publisher: %s Language: %s";
     public static final String PUBLISHABLE_VIDEO_NOT_EXIST = "Publishable Video %s does not exist.";
 
@@ -203,8 +207,21 @@ public class Main {
         System.out.println("list Subtitles");
     }
 
+
+//commit -4
     private static void getVideoData(Scanner in, Youvideo yv) {
-        System.out.println("getVideoData");
+        String v_id = in.next();
+        if(!yv.videoIdExist(v_id)){
+            System.out.printf(PUBLISHABLE_VIDEO_NOT_EXIST + "%n",v_id);
+            return;
+        }
+        String v_type = VIDEO;
+        if(yv.isVideoInstance(v_id, PremiumVideo.class)){
+            v_type= PREMIUM;
+        }
+        PublishableVideo video = (PublishableVideo) yv.findVideoById(v_id);
+        System.out.printf(VIDEO_INFO + "%n",v_type,video.getUid(),video.getDuration(),video.getTitle());
+        System.out.printf(VIDEO_FILE_INFO + "%n",video.getFileLocation(),video.getPublisher(),video.getLanguage());
     }
 
 
@@ -240,7 +257,7 @@ public class Main {
           return;
       };
       int duration = in.nextInt();
-      String url = in.nextLine();
+      String url = in.next();
       String publisher = in.next();
       String title = in.next();
       String langCode = in.next();
