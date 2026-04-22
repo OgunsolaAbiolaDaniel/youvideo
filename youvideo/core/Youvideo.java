@@ -1,5 +1,8 @@
 package youvideo.core;
 
+import dataStructures.Array;
+import youvideo.podcast.Podcast;
+import youvideo.show.Show;
 import youvideo.video.VideoClass;
 
 public interface Youvideo {
@@ -90,6 +93,10 @@ public interface Youvideo {
 
     void createPodcast(String title, String author, String langCode);
     public boolean podcastExist(String title);
+    public Podcast findPodcastByTitle(String title);
+    public boolean episode_Exist(String id);
+    public boolean isEpisodeDateValid(String podcastTitle, String releaseDate);
+    public Array<Podcast> podcastsByAuthor(String authorName);
     /**
      * Adds a new episode to an existing podcast.
      * <p>
@@ -162,6 +169,9 @@ public interface Youvideo {
      * @param transmissionDate The date the show is scheduled to be broadcast.
      */
     void createShow(String author, String videoId, String transmissionDate);
+    public boolean showTitleExist(String title);
+    public Show findShowByTitle(String title);
+    public boolean isVideoUsedInShow(String videoId);
 
     /**
      * Retrieves and displays a show's data based on its title.
