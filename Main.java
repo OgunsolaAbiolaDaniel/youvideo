@@ -2,14 +2,14 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import dataStructures.Array;
-import youvideo.core.Youvideo;
-import youvideo.core.YouvideoClass;
-import youvideo.podcast.Podcast;
-import youvideo.show.Show;
-import youvideo.subtitle.Subtitle;
-import youvideo.video.EpisodeClass;
-import youvideo.video.PremiumVideo;
-import youvideo.video.PublishableVideo;
+import youvideo.Youvideo;
+import youvideo.YouvideoClass;
+import youvideo.Podcast;
+import youvideo.Show;
+import youvideo.Subtitle;
+import youvideo.EpisodeClass;
+import youvideo.PremiumVideo;
+import youvideo.PublishableVideo;
 
 public class Main {
 
