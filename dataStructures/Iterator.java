@@ -1,5 +1,4 @@
 package dataStructures;
-
 /**
  * This interface represents an iterator over a collection of elements of type E.
  * @param <E> the type of elements in the collection

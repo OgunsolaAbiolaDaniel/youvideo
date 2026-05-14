@@ -1,18 +1,19 @@
+
 /**
  * @author POO team 2023/24
  */
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.Locale;
-
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * The Tests class specifies a set of tests implemented using the JUnit tool.
@@ -29,37 +30,79 @@ public class Tests {
      * Just set up this sequence of tests!
      */
 
-    @Test public void test01() { test("input1_training.txt","output1_training.txt"); }
-    @Test public void test02() { test("input2_training.txt","output2_training.txt"); }
-    @Test public void test03() { test("input3_training.txt","output3_training.txt"); }
-    @Test public void test04() { test("input4_training.txt","output4_training.txt"); }
-    @Test public void test05() { test("input5_training.txt","output5_training.txt"); }
-    @Test public void test06() { test("input6_training.txt","output6_training.txt"); }
-    @Test public void test07() { test("input7_training.txt","output7_training.txt"); }
-    @Test public void test08() { test("input8_training.txt","output8_training.txt"); }
-    @Test public void test09() { test("input9_training.txt","output9_training.txt"); }
-    /**  @Test public void test10() { test("10-in.txt","10-out.txt"); }
-     @Test public void test11() { test("11-in.txt","11-out.txt"); }
-     @Test public void test12() { test("12-in.txt","12-out.txt"); }
-     @Test public void test13() { test("13-in.txt","13-out.txt"); }
-     @Test public void test14() { test("14-in.txt","14-out.txt"); }
-     @Test public void test15() { test("15-in.txt","15-out.txt"); }
-     @Test public void test16() { test("16-in.txt","16-out.txt"); }
-     @Test public void test17() { test("17-in.txt","17-out.txt"); }
-     @Test public void test18() { test("18-in.txt","18-out.txt"); }
-     @Test public void test19() { test("19-in.txt","19-out.txt"); }
-     @Test public void test20() { test("20-in.txt","20-out.txt"); }*/
+    @Test
+    public void test01() {
+        test("input1_training.txt", "output1_training.txt");
+    }
+
+    @Test
+    public void test02() {
+        test("input2_training.txt", "output2_training.txt");
+    }
+
+    @Test
+    public void test03() {
+        test("input3_training.txt", "output3_training.txt");
+    }
+
+    @Test
+    public void test04() {
+        test("input4_training.txt", "output4_training.txt");
+    }
+
+    @Test
+    public void test05() {
+        test("input5_training.txt", "output5_training.txt");
+    }
+
+    @Test
+    public void test06() {
+        test("input6_training.txt", "output6_training.txt");
+    }
+
+    @Test
+    public void test07() {
+        test("input7_training.txt", "output7_training.txt");
+    }
+
+    @Test
+    public void test08() {
+        test("input8_training.txt", "output8_training.txt");
+    }
+
+    @Test
+    public void test09() {
+        test("input9_training.txt", "output9_training.txt");
+    }
+
+    /**
+     * @Test public void test10() { test("10-in.txt","10-out.txt"); }
+     * @Test public void test11() { test("11-in.txt","11-out.txt"); }
+     * @Test public void test12() { test("12-in.txt","12-out.txt"); }
+     * @Test public void test13() { test("13-in.txt","13-out.txt"); }
+     * @Test public void test14() { test("14-in.txt","14-out.txt"); }
+     * @Test public void test15() { test("15-in.txt","15-out.txt"); }
+     * @Test public void test16() { test("16-in.txt","16-out.txt"); }
+     * @Test public void test17() { test("17-in.txt","17-out.txt"); }
+     * @Test public void test18() { test("18-in.txt","18-out.txt"); }
+     * @Test public void test19() { test("19-in.txt","19-out.txt"); }
+     * @Before
+     * @Test public void test20() { test("20-in.txt","20-out.txt"); }
+     */
 
 
 
     private static final File BASE = new File("Tests");
 
     private PrintStream consoleStream;
+    private InputStream consoleInput;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
     public void setup() {
         consoleStream = System.out;
+        consoleInput = System.in;
+        outContent.reset();
         System.setOut(new PrintStream(outContent));
     }
 
@@ -83,9 +126,10 @@ public class Tests {
             consoleStream.println("OUTPUT =============");
         } catch(Exception e) {
             e.printStackTrace();
-            fail("Erro a ler o ficheiro");
+            throw new AssertionError("Erro a ler o ficheiro");
         }
 
+        String actualOutput = "";
         try {
             Locale.setDefault(Locale.US);
             System.setIn(new FileInputStream(input));
@@ -93,13 +137,15 @@ public class Tests {
             mainClass.getMethod("main", String[].class).invoke(null, new Object[] { new String[0] });
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Erro no programa");
+            throw new AssertionError("Erro no programa");
         } finally {
-            byte[] outPrintBytes = outContent.toByteArray();
-            consoleStream.println(new String(outPrintBytes));
-
-            assertEquals(removeCarriages(fullOutput), removeCarriages(new String(outContent.toByteArray())));
+            actualOutput = new String(outContent.toByteArray());
+            System.setOut(consoleStream);
+            System.setIn(consoleInput);
+            consoleStream.println(actualOutput);
         }
+
+        assertEquals(removeCarriages(fullOutput), removeCarriages(actualOutput));
     }
 
     private static String removeCarriages(String s) {

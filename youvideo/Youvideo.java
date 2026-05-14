@@ -1,8 +1,41 @@
 package youvideo;
 
-import dataStructures.Array;
+import java.util.List;
 
 public interface Youvideo {
+  /**
+   * check if the tag is already there i.e already tagged
+   * 
+   * @param title
+   * @param tag
+   * @return
+   */
+  boolean isAlreadyTagged(String title, String tag);
+
+  /**
+   * Adds a tag to a video.
+   *
+   * @param title
+   * @param tag
+   */
+  void addTag(String title, String tag);
+
+  /**
+   * Removes a tag from a video.
+   *
+   * @param title
+   * @param tag
+   */
+  void removeTag(String title, String tag);
+
+  /**
+   * check if title exists
+   * 
+   * @param title
+   * @return
+   */
+  boolean titleExists(String title);
+
     /**
      * Checks whether a video identifier already exists in the platform.
      *
@@ -133,7 +166,7 @@ public interface Youvideo {
      * @param authorName author whose podcasts should be retrieved
      * @return podcasts found for that author, in insertion order
      */
-    public Array<Podcast> podcastsByAuthor(String authorName);
+    public List<Podcast> podcastsByAuthor(String authorName);
     /**
      * Adds a new episode to an existing podcast.
      * <p>

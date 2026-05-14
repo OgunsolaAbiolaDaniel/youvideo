@@ -1,5 +1,7 @@
 package youvideo;
-import dataStructures.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Specialized publishable video with subtitle support.
@@ -8,7 +10,7 @@ import dataStructures.*;
  * one subtitle for the same language.
  */
 public class PremiumVideo extends PublishableVideo {
-    private final Array<Subtitle> subtitles ;
+    private final List<Subtitle> subtitles;
 
     /**
      * Creates a premium video with its initial subtitle.
@@ -24,8 +26,8 @@ public class PremiumVideo extends PublishableVideo {
      */
     public PremiumVideo(String uid, int duration, String fileLocation, String language, String title, String publisher,String subtitleUrl,String subtitleLang){
         super(uid, duration, fileLocation, language, title, publisher);
-        this.subtitles= new ArrayClass<Subtitle>();
-        subtitles.insertLast(new SubtitleClass(subtitleLang,uid,subtitleUrl));
+        this.subtitles = new ArrayList<>();
+        subtitles.addLast(new SubtitleClass(subtitleLang, uid, subtitleUrl));
     }
 
     /**
@@ -33,7 +35,7 @@ public class PremiumVideo extends PublishableVideo {
      *
      * @return the subtitle collection in insertion order
      */
-    public Array<Subtitle> getSubtitles() {
+    public List<Subtitle> getSubtitles() {
         return subtitles;
     }
 
@@ -45,6 +47,6 @@ public class PremiumVideo extends PublishableVideo {
      * @param subtitleLanguage language code of the subtitle
      */
     public void addSubtitle(String v_uid ,String subtitleUrl,String subtitleLanguage) {
-        subtitles.insertLast(new SubtitleClass(subtitleLanguage,v_uid, subtitleUrl));
+        subtitles.addLast(new SubtitleClass(subtitleLanguage, v_uid, subtitleUrl));
     }
 }

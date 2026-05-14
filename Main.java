@@ -1,15 +1,16 @@
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-
-import dataStructures.Array;
-import youvideo.Youvideo;
-import youvideo.YouvideoClass;
-import youvideo.Podcast;
-import youvideo.Show;
-import youvideo.Subtitle;
+import java.util.Set;
 import youvideo.EpisodeClass;
+import youvideo.Podcast;
 import youvideo.PremiumVideo;
 import youvideo.PublishableVideo;
+import youvideo.Show;
+import youvideo.Subtitle;
+import youvideo.Taggable;
+import youvideo.Youvideo;
+import youvideo.YouvideoClass;
 
 public class Main {
 
@@ -30,6 +31,8 @@ public class Main {
     public static final String GET_SHOW = "getshow";
     public static final String REMOVE_SHOW = "removeshow";
     public static final String REMOVE_VIDEO = "removevideo";
+    public static final String ADD_TAG = "addtag";
+    public static final String REMOVE_TAG = "removetag";
 
     public static final String UNKNOWN_COMMAND_MSG = "Unknown command. Type help to see available commands.";
     public static final String BYE_MSG = "Bye!";
@@ -52,6 +55,8 @@ public class Main {
             + "getshow - presents show data from its title%n"
             + "removeshow - removes a show%n"
             + "removevideo - removes a publishable video%n"
+                    + "addtag - adds a tag to a show or podcast%n"
+                    + "removetag - removes a tag from a show or podcast%n"
             + "help - shows the available commands%n"
             + "exit - terminates the execution of the program";
 
@@ -100,6 +105,12 @@ public class Main {
     public static final String CANNOT_REMOVE_EPISODE_VIDEO = "Cannot remove: video is an episode of a podcast.";
     public static final String CANNOT_REMOVE_SHOW_VIDEO = "Cannot remove: video is used in a show.";
 
+    public static final String TAG_ADDED_SUCCESSFULLY = "Tag added successfully.";
+    public static final String TAG_REMOVED_SUCCESSFULLY = "Tag removed successfully.";
+    public static final String TITLE_NOT_EXIST = "Title does not exist.";
+    public static final String TITLE_ALREADY_TAGGED = "Title is already tagged with %s.";
+    public static final String TITLE_NOT_TAGGED = "Title is not tagged with %s.";
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         commands(in);
@@ -119,29 +130,99 @@ public class Main {
             String command = tokens[0].toLowerCase(Locale.ROOT);
 
             switch (command) {
-                case EXIT -> {
+            case EXIT:
                     System.out.println(BYE_MSG);
                     return;
+                case HELP:
+                    System.out.printf(HELP_MSG + "%n");
+                    break;
+                case CREATE_PUBLISHABLE:
+                    createPublishable(line, in, yv);
+                    break;
+                case CREATE_PREMIUM:
+                    createPremium(line, in, yv);
+                    break;
+                case ADD_SUBTITLE:
+                    addSubtitle(line, in, yv);
+                    break;
+                case GET_VIDEO:
+                    getVideoData(line, yv);
+                    break;
+                case SUBTITLES:
+                    listSubtitles(line, yv);
+                    break;
+                case CREATE_PODCAST:
+                    createPodcast(line, in, yv);
+                    break;
+                case ADD_EPISODE:
+                    addEpisode(line, in, yv);
+                    break;
+                case GET_PODCAST:
+                    getPodcastData(line, yv);
+                    break;
+                case EPISODES:
+                    listEpisodes(line, yv);
+                    break;
+                case AUTHOR_PODCASTS:
+                    listPodcasts(line, yv);
+                    break;
+                case REMOVE_PODCAST:
+                    removePodcast(line, yv);
+                    break;
+                case CREATE_SHOW:
+                    createShow(line, in, yv);
+                    break;
+                case GET_SHOW:
+                    getShowData(line, yv);
+                    break;
+                case REMOVE_SHOW:
+                    removeShow(line, yv);
+                    break;
+                case REMOVE_VIDEO:
+                    removeVideo(line, yv);
+                    break;
+                case ADD_TAG:
+                    addTag(line, in, yv);
+                    break;
+                case REMOVE_TAG:
+                    removeTag(line, in, yv);
+                    break;
+
+                default:
+                    printUnknownCommands(tokens);
+                    break;
                 }
-                case HELP -> System.out.printf(HELP_MSG + "%n");
-                case CREATE_PUBLISHABLE -> createPublishable(line, in, yv);
-                case CREATE_PREMIUM -> createPremium(line, in, yv);
-                case ADD_SUBTITLE -> addSubtitle(line, in, yv);
-                case GET_VIDEO -> getVideoData(line, yv);
-                case SUBTITLES -> listSubtitles(line, yv);
-                case CREATE_PODCAST -> createPodcast(line, in, yv);
-                case ADD_EPISODE -> addEpisode(line, in, yv);
-                case GET_PODCAST -> getPodcastData(line, yv);
-                case EPISODES -> listEpisodes(line, yv);
-                case AUTHOR_PODCASTS -> listPodcasts(line, yv);
-                case REMOVE_PODCAST -> removePodcast(line, yv);
-                case CREATE_SHOW -> createShow(line, in, yv);
-                case GET_SHOW -> getShowData(line, yv);
-                case REMOVE_SHOW -> removeShow(line, yv);
-                case REMOVE_VIDEO -> removeVideo(line, yv);
-                default -> printUnknownCommands(tokens);
             }
         }
+
+        private static void addTag(String line, Scanner in, Youvideo yv) {
+            String title = argumentAfterCommand(line);
+            String tag = readLine(in);
+            if (!yv.titleExists(title)) {
+                System.out.println(TITLE_NOT_EXIST);
+                return;
+            }
+            if (yv.isAlreadyTagged(title, tag)) {
+                System.out.printf(TITLE_ALREADY_TAGGED + "%n", tag);
+                return;
+            }
+            yv.addTag(title, tag);
+            System.out.println(TAG_ADDED_SUCCESSFULLY);
+        }
+
+        private static void removeTag(String line, Scanner in, Youvideo yv) {
+            String title = argumentAfterCommand(line);
+            String tag = readLine(in);
+            if (!yv.titleExists(title)) {
+                System.out.println(TITLE_NOT_EXIST);
+                return;
+            }
+            if (!yv.isAlreadyTagged(title, tag)) {
+                System.out.printf(TITLE_NOT_TAGGED + "%n", tag);
+                return;
+            }
+            yv.removeTag(title, tag);
+            System.out.println(TAG_REMOVED_SUCCESSFULLY);
     }
 
     private static void createPublishable(String line, Scanner in, Youvideo yv) {
@@ -261,7 +342,7 @@ public class Main {
 
         PremiumVideo video = (PremiumVideo) yv.findVideoById(videoId);
         System.out.printf(SUBTITLES_HEADER + "%n", video.getTitle());
-        Array<Subtitle> subtitles = video.getSubtitles();
+        List<Subtitle> subtitles = video.getSubtitles();
         for (int i = 0; i < subtitles.size(); i++) {
             Subtitle subtitle = subtitles.get(i);
             System.out.printf(
@@ -286,7 +367,7 @@ public class Main {
             return;
         }
 
-        Array<Podcast> authorPodcasts = yv.podcastsByAuthor(author);
+        List<Podcast> authorPodcasts = yv.podcastsByAuthor(author);
         if (authorPodcasts.size() > 0) {
             author = authorPodcasts.get(0).getAuthor();
         }
@@ -332,12 +413,22 @@ public class Main {
         }
 
         Podcast podcast = yv.findPodcastByTitle(title);
+
         System.out.printf(PODCAST_INFO + "%n", podcast.getTitle(), podcast.getAuthor(), podcast.getLanguage());
-        Array<EpisodeClass> episodes = podcast.getEpisodes();
+        List<EpisodeClass> episodes = podcast.getEpisodes();
         if (episodes.size() > 0) {
             System.out.printf(LATEST_EPISODE_DATE + "%n", episodes.get(episodes.size() - 1).getReleaseDate());
         }
+        Taggable taggable = (Taggable) podcast;
+        Set<String> tags = taggable.getTags();
+        if (!tags.isEmpty()) {
+            System.out.println("Tags:"); // print the word "Tags:"
+            for (String tag : tags) {
+                System.out.println(tag); // print each tag
+            }
+        }
     }
+
 
     private static void listEpisodes(String line, Youvideo yv) {
         String title = argumentAfterCommand(line);
@@ -347,7 +438,7 @@ public class Main {
         }
 
         Podcast podcast = yv.findPodcastByTitle(title);
-        Array<EpisodeClass> episodes = podcast.getEpisodes();
+        List<EpisodeClass> episodes = podcast.getEpisodes();
         if (episodes.size() == 0) {
             System.out.println(NO_EPISODES_AVAILABLE);
             return;
@@ -368,7 +459,7 @@ public class Main {
 
     private static void listPodcasts(String line, Youvideo yv) {
         String authorName = argumentAfterCommand(line);
-        Array<Podcast> podcasts = yv.podcastsByAuthor(authorName);
+        List<Podcast> podcasts = yv.podcastsByAuthor(authorName);
         if (podcasts.size() == 0) {
             System.out.println(NO_PODCASTS_FOR_AUTHOR);
             return;
@@ -409,7 +500,7 @@ public class Main {
             return;
         }
 
-        Array<Podcast> authorPodcasts = yv.podcastsByAuthor(author);
+        List<Podcast> authorPodcasts = yv.podcastsByAuthor(author);
         if (authorPodcasts.size() > 0) {
             author = authorPodcasts.get(0).getAuthor();
         }
@@ -427,6 +518,15 @@ public class Main {
         }
 
         System.out.printf(SHOW_INFO + "%n", show.getTransmissionDate(), show.getAuthor(), show.getVideo().getTitle());
+
+        Taggable taggableShow = (Taggable) show;
+        Set<String> tags = taggableShow.getTags();
+        if (!tags.isEmpty()) {
+            System.out.println("Tags:"); // print the word "Tags:"
+            for (String tag : tags) {
+                System.out.println(tag); // print each tag
+            }
+        }
     }
 
     private static void removeShow(String line, Youvideo yv) {

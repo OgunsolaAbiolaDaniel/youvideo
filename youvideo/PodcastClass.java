@@ -1,17 +1,20 @@
 package youvideo;
 
-import dataStructures.Array;
-import dataStructures.ArrayClass;
+import java.util.TreeSet;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * Default implementation of a podcast.
  */
-public class PodcastClass implements Podcast {
+public class PodcastClass implements Podcast, Taggable {
     private String title;
     private String author;
     private String language;
-    private  Array<EpisodeClass> vid_collection;
+    private TreeSet<String> tags;
+    private List<EpisodeClass> vid_collection;
 
     /**
      * Creates an empty podcast.
@@ -24,7 +27,10 @@ public class PodcastClass implements Podcast {
         this.title=title;
         this.author= author;
         this.language = language;
-        vid_collection= new ArrayClass<EpisodeClass>();
+        this.tags = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);// the tags tree set .. using the case insensitive
+                                                                 // order from java for auto formatting
+
+        vid_collection = new ArrayList<EpisodeClass>(); // changed to an array list
     }
 
     /**
@@ -51,14 +57,31 @@ public class PodcastClass implements Podcast {
     /**
      * {@inheritDoc}
      */
-    public Array<EpisodeClass> getEpisodes(){
+    public List<EpisodeClass> getEpisodes() {
         return this.vid_collection;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addEpisode(EpisodeClass episode){
-        vid_collection.insertLast(episode);
+    public void addEpisode(EpisodeClass episode) {
+        vid_collection.addLast(episode);
+    }
+
+    // new methods implementation from my Taggable(phase2)
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        tags.remove(tag);
+    }
+
+    public boolean hasTag(String tag) {
+        return tags.contains(tag);
+    }
+
+    public Set<String> getTags() {
+        return tags;
     }
 }

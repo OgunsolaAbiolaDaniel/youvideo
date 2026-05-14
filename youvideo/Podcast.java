@@ -1,6 +1,6 @@
 package youvideo;
 
-import dataStructures.Array;
+import java.util.List;
 
 /**
  * Models a podcast and its ordered collection of episodes.
@@ -32,7 +32,7 @@ public interface Podcast {
      *
      * @return the episode collection
      */
-    public Array<EpisodeClass> getEpisodes();
+    public List<EpisodeClass> getEpisodes();
 
     /**
      * Adds a new episode to the podcast.
